@@ -25,3 +25,37 @@ ASGI_APPLICATION = "myprojectname.asgi.application"
 #! CONSUMERS
 6. Now we have to create a consumers.py file in the application directory which acts same as the views.py file. It allows us to series of functions to be called along with sync and async functions.
 7. The 3 functions are: websocket_connect, websocket_receive, websocket_disconnect.
+8. websocket_connect => This handler is called when client initially opens a connection and is about to finish the WebSocket handshake.
+9. websocket_receive => This handler is called when data received from Client.
+10. websocket_disconnect => This handler is called when either connection to the client is lost, either from the client closing the connection, the server closing the connection, or loss of the socket.
+
+#! ROUTING
+11. Now we have to create a routing.py file in the application directory which acts same as the urls.py file.
+12. Add the following code in routing.py:
+"
+websocket_urlpatterns = [
+    path("ws/sc/", consumers.MySyncConsumer.as_asgi()),
+    path("ws/ac/", consumers.MyAsyncConsumer.as_asgi()),
+]
+"
+13. Write .as_asgi() in the above code which is the same as .as_view() in the views.py file. This will convert the sync and async functions to ASGI functions.
+14. Now go to your asgi.py file and add the following code:
+"
+from channels.routing import ProtocolTypeRouter
+
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": URLRouter(
+            DjangoChannelsWebSocketApp.routing.websocket_urlpatterns
+        ),
+    }
+)
+"
+#! NOTE: Uninstall channels using `pip uninstall channels`, then install 'pip install daphne'. Then add 'daphne' at the very beginning in the INSTALLED_APPS of settings.py , again install channels using `pip install channels`.
+15. Now go to POSTMAN and send the websocket request to the server using "ws://127.0.0.1:8000/ws/sc/". You can also send data to the server and click the send button.
+16. The data send by the user will be in event => {'type': 'websocket.receive', 'text': 'hey ayush, this is message from postman...'}
+17. You can get the data by using event[data]
+18. Use "self.send({"type": "websocket.accept"})" in the websocket_connect function to accept the connection.
+19. Use "raise StopConsumer()" in the websocket_disconnect function to disconnect the connection.
+20. Use "await self.send({"type": "websocket.accept"})" in the websocket_connect function to accept the connection for asynchronous functions.
