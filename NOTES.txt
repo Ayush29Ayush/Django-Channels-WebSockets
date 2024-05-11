@@ -1,0 +1,27 @@
+Refer this playlist => https://www.youtube.com/playlist?list=PLbGui_ZYuhij6LpUbWgKUxggL_AuoHHVw
+
+#! INSTALLATION OF DJANGO CHANNELS
+1. Install channels using `pip install channels`
+2. Now add `channels` in INSTALLED_APPS
+
+#! ASGI
+3. In the asgi.py file from the project directory, type the folowing code:
+"
+from channels.routing import ProtocolTypeRouter
+application = ProtocolTypeRouter({
+    "http": get_asgi_application(),
+    # Just HTTP for now. (We can add other protocols later.)
+})
+"
+4. In settings.py, comment the following code:
+"
+WSGI_APPLICATION = 'DjangoChannelsWebSocketProject.wsgi.application'
+"
+5. In settings.py, after commenting the above code, add the following code: 
+"
+ASGI_APPLICATION = "myprojectname.asgi.application"
+"
+
+#! CONSUMERS
+6. Now we have to create a consumers.py file in the application directory which acts same as the views.py file. It allows us to series of functions to be called along with sync and async functions.
+7. The 3 functions are: websocket_connect, websocket_receive, websocket_disconnect.
