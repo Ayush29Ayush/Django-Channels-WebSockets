@@ -115,3 +115,25 @@ class MyAsyncConsumer(AsyncConsumer):
 #! NOTE: When to use synchronous or asynchronous functions?
 1. In general, synchronous functions are used when the task can be completed quickly without blocking other operations, while asynchronous functions are used for tasks that may take some time to complete and should not block the execution of other code.
 2. For example, in a web application, you might use a synchronous function to perform a simple calculation that can be done quickly without waiting, like adding two numbers together. On the other hand, you would use an asynchronous function to make an API call to fetch data from a remote server since network requests can take time and you don't want to block the rest of the application while waiting for the response.
+
+#! Handle Websocket from Frontend JavaScript in Django Channels
+23. To construct a websocket, use the websocket constructor. For example: var ws = new WebSocket('ws://127.0.0.1:8000/ws/sc/');
+
+a) WebSocket Properties
+  1. ReadyState
+  2. onopen
+  3. onclose
+  4. onmessage
+  5. onerror
+
+b) WebSocket Methods
+  1. send
+  2. close
+
+c) WebSocket Events and Event Handlers
+  1. open
+  2. close
+  3. message
+  4. error
+
+24. Check templates/index.html for more information.
