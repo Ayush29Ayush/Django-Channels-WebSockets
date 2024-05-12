@@ -137,3 +137,12 @@ c) WebSocket Events and Event Handlers
   4. error
 
 24. Check templates/index.html for more information.
+
+#! Python JSON Library - 2 imp functions
+25. json.dumps() => converts a Python object (dict, list, tuple, string, int, float, True, False, None) into a JSON formatted string
+26. json.loads() => converts a JSON formatted string into a Python object (dict, list, tuple, string, int, float, True, False, None)
+
+#! JavaScript Object Notation - 2 imp functions
+27. JSON.stringify() => converts a JavaScript object (dict, list, tuple, string, int, float, True, False, None) into a JSON formatted string
+28. JSON.parse() => converts a JSON formatted string into a JavaScript object (dict, list, tuple, string, int, float, True, False, None)
+
