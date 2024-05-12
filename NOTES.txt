@@ -60,3 +60,58 @@ application = ProtocolTypeRouter(
 19. Use "raise StopConsumer()" in the websocket_disconnect function to disconnect the connection.
 20. Use "await self.send({"type": "websocket.accept"})" in the websocket_connect function to accept the connection for asynchronous functions.
 21. Use "self.send({'type':'websocket.send','text':'Message Sent to Client'})" in the websocket_receive function to send data to the client.
+
+#! Real-time Data Example
+"
+from channels.consumer import SyncConsumer, AsyncConsumer
+from channels.exceptions import StopConsumer
+from time import sleep
+import asyncio
+
+class MySyncConsumer(SyncConsumer):
+  def websocket_connect(self, event):
+    print('Websocket Connected...', event)
+    self.send({
+      'type':'websocket.accept',
+    })
+  
+  def websocket_receive(self, event):
+    print('Message received from Client', event)
+    print(event['text'])
+    for i in range(50):
+      self.send({
+        'type':'websocket.send',
+        'text': str(i)
+      })
+      sleep(1)
+
+  def websocket_disconnect(self, event):
+    print('Websocket Disconnected...', event)
+    raise StopConsumer()
+
+class MyAsyncConsumer(AsyncConsumer):
+  async def websocket_connect(self, event):
+    print('Websocket Connected...', event)
+    await self.send({
+      'type':'websocket.accept',
+    })
+  
+  async def websocket_receive(self, event):
+    print('Message received from Client', event)
+    print(event['text'])
+    for i in range(50):
+      await self.send({
+        'type':'websocket.send',
+        'text': str(i)
+      })
+      await asyncio.sleep(1)
+
+  async def websocket_disconnect(self, event):
+    print('Websocket Disconnected...', event)
+    raise StopConsumer()
+"
+22. time.sleep() is used to create a delay of 1 second between each message sent to the client, but it will not work for asynchronous functions. Use asyncio.sleep() instead for async functions.
+
+#! NOTE: When to use synchronous or asynchronous functions?
+1. In general, synchronous functions are used when the task can be completed quickly without blocking other operations, while asynchronous functions are used for tasks that may take some time to complete and should not block the execution of other code.
+2. For example, in a web application, you might use a synchronous function to perform a simple calculation that can be done quickly without waiting, like adding two numbers together. On the other hand, you would use an asynchronous function to make an API call to fetch data from a remote server since network requests can take time and you don't want to block the rest of the application while waiting for the response.
