@@ -59,3 +59,4 @@ application = ProtocolTypeRouter(
 18. Use "self.send({"type": "websocket.accept"})" in the websocket_connect function to accept the connection.
 19. Use "raise StopConsumer()" in the websocket_disconnect function to disconnect the connection.
 20. Use "await self.send({"type": "websocket.accept"})" in the websocket_connect function to accept the connection for asynchronous functions.
+21. Use "self.send({'type':'websocket.send','text':'Message Sent to Client'})" in the websocket_receive function to send data to the client.
