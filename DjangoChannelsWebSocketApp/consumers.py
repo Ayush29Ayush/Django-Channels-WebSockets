@@ -1,4 +1,4 @@
-# Topic - Real-time Data Example
+# Topic - Web API WebSocket - JavaScript
 from channels.consumer import SyncConsumer, AsyncConsumer
 from channels.exceptions import StopConsumer
 from time import sleep
@@ -14,7 +14,7 @@ class MySyncConsumer(SyncConsumer):
   def websocket_receive(self, event):
     print('Message received from Client', event)
     print(event['text'])
-    for i in range(5):
+    for i in range(10):
       self.send({
         'type':'websocket.send',
         'text': str(i)
@@ -35,7 +35,7 @@ class MyAsyncConsumer(AsyncConsumer):
   async def websocket_receive(self, event):
     print('Message received from Client', event)
     print(event['text'])
-    for i in range(5):
+    for i in range(50):
       await self.send({
         'type':'websocket.send',
         'text': str(i)
