@@ -146,3 +146,18 @@ c) WebSocket Events and Event Handlers
 27. JSON.stringify() => converts a JavaScript object (dict, list, tuple, string, int, float, True, False, None) into a JSON formatted string
 28. JSON.parse() => converts a JSON formatted string into a JavaScript object (dict, list, tuple, string, int, float, True, False, None)
 
+#! Channel Layer and Redis Channel Layer in Django Channels
+29. Since Redis is native for Linux, we can use Memurai, which is Redis for windows. Refer => https://www.memurai.com/
+30. We can also download redis for windows directly from "https://github.com/tporadowski/redis/releases"
+31. Install "pip install channels-redis"
+32. Add the following code in settings.py:
+"
+CHANNEL_LAYERS = {
+  "default": {
+      "BACKEND": "channels_redis.core.RedisChannelLayer",
+      "CONFIG": {
+          "hosts": [("127.0.0.1", 6379)],
+      },
+  },
+}
+"
