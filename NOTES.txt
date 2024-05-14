@@ -148,7 +148,7 @@ c) WebSocket Events and Event Handlers
 
 #! Channel Layer and Redis Channel Layer in Django Channels
 29. Since Redis is native for Linux, we can use Memurai, which is Redis for windows. Refer => https://www.memurai.com/
-30. We can also download redis for windows directly from "https://github.com/tporadowski/redis/releases"
+30. We can also download redis for windows directly from "https://github.com/tporadowski/redis/releases". I am doing this.
 31. Install "pip install channels-redis"
 32. Add the following code in settings.py:
 "
