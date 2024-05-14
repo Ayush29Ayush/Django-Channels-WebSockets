@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat App</title>
+</head>
+
+<body>
+  <script>
+    var ws = new WebSocket('ws://127.0.0.1:8000/ws/sc/')
+    ws.onopen = function () {
+      console.log('Websocket Connection open...')
+    };
+    ws.onmessage = function (event) {
+      console.log('Message Received from Server...', event.data)
+    };
+    ws.onclose = function (event) {
+      console.error('Websocket Connection closed unexpectedly...');
+    };
+  </script>
+</body>
+</html>
