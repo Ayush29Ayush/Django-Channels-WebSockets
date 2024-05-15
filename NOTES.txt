@@ -161,3 +161,30 @@ CHANNEL_LAYERS = {
   },
 }
 "
+33. You can get the name of the channel layer using self.channel_layer. 
+Example output => "Channel Layer... RedisChannelLayer(hosts=[{'host': '127.0.0.1', 'port': 6379}])"
+34. You can get the name of the channel name using self.channel_name
+Example output => "Channel Name... specific.8f249b1ec5f9457b9b8c3be38c160cea!dad126a0f6674663aa8374358a4cf5f9"
+
+35. To add a channel_name into a group, use the channel_layer.group_add() function inside websocket_connect(). Refer => https://channels.readthedocs.io/en/latest/topics/channel_layers.html
+Example => "self.channel_layer.group_add("programmers", self.channel_name)"
+
+36. group_add() is a async function so to use it inside a synchronous function, we can use the async_to_sync() function.
+
+37. To discard a channel from a group, use the channel_layer.group_discard() function inside websocket_disconnect() function. Refer => https://channels.readthedocs.io/en/latest/topics/channel_layers.html
+
+38. From UI, always use JSON.stringify() and JSON.parse() to convert objects to strings and vice versa respectively. 
+Example => 
+"
+document.getElementById('chat-message-submit').onclick = function (event) {
+  const messageInputDom = document.getElementById('chat-message-input')
+  const message = messageInputDom.value
+  ws.send(JSON.stringify({      // Object to String
+    'msg': message
+  }))
+  messageInputDom.value = ''
+}
+"
+39. The transer of data between the client and server should be in the form of strings, That is why we use JSON.stringify() and JSON.parse() to convert objects to strings and vice versa respectively.
+
+Continue from 1:20:30
