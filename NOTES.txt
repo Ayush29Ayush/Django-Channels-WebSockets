@@ -187,4 +187,37 @@ document.getElementById('chat-message-submit').onclick = function (event) {
 "
 39. The transer of data between the client and server should be in the form of strings, That is why we use JSON.stringify() and JSON.parse() to convert objects to strings and vice versa respectively.
 
-Continue from 1:20:30
+40. To send the message received from the client to the programmers group, add this in websocket_receive():
+"
+async_to_sync(self.channel_layer.group_send)(
+  'programmers', 
+  {
+    'type': 'chat.message',
+    'message':event['text']
+  }
+)
+"
+
+41. For "{"type": "chat.message", "message": event["text"]}", its handler func name will be chat_message. Here the event is chat.message and its event handler is chat_message().
+"
+def chat_message(self, event):
+    print('Event...', event)
+    print('Actual Data...', event['message'])
+    print('Type of Actual Data...', type(event['message']))
+    self.send({
+      'type': 'websocket.send',
+      'text': event['message']
+    })
+"
+42. chat.message and chat_message are user defined function names, they are not built-in function names.
+#! NOTE => for every type of a.b, its handler will be function of a_b(). Check Image number 16
+{'type': 'websocket.receive', 'text': '{"msg":"ayush"}'}
+"
+def websocket_receive(self, event):
+        print("Entire Event in websocket_receive:", event)
+        print("Message Received from Client...", event["text"])
+        print("Type of Message Received from Client...", type(event["text"]))
+        async_to_sync(self.channel_layer.group_send)(
+            "programmers", {"type": "chat.message", "message": event["text"]}
+        )
+"
