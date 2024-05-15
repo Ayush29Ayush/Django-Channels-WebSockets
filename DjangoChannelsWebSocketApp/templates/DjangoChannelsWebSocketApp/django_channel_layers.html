@@ -9,6 +9,11 @@
 </head>
 
 <body>
+
+  <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+  <input type="text" id="chat-message-input" size="100"><br>
+  <input type="button" value="Send" id="chat-message-submit">
+
   <script>
     var ws = new WebSocket('ws://127.0.0.1:8000/ws/sc/')
     ws.onopen = function () {
@@ -20,6 +25,15 @@
     ws.onclose = function (event) {
       console.error('Websocket Connection closed unexpectedly...');
     };
+
+    document.getElementById('chat-message-submit').onclick = function (event) {
+      const messageInputDom = document.getElementById('chat-message-input')
+      const message = messageInputDom.value
+      ws.send(JSON.stringify({      // Object to String
+        'msg': message
+      }))
+      messageInputDom.value = ''
+    }
   </script>
 </body>
 </html>
