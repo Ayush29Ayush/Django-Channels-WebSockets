@@ -238,3 +238,8 @@ ws.onmessage = function (event) {
 "
 
 #! IMP -> CODE REVISION -> 01:16:00 - 01:30:00
+
+#! AsyncConsumer 
+45. Keep the consumers code same with just async function and use await just before sending data.
+46. Create a routing url for the consumer.
+47. Now use the async url in your template.
