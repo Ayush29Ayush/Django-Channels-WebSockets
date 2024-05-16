@@ -9,14 +9,13 @@ from asgiref.sync import async_to_sync
 class MySyncConsumer(SyncConsumer):
     def websocket_connect(self, event):
         print("Websocket Connected...", event)
-        print(
-            "Channel Layer...", self.channel_layer
-        )  # get default channel layer from a project
+        print("Channel Layer...", self.channel_layer)  
         print("Channel Name...", self.channel_name)  # get channel Name
-        #! add a channel to a new or existing group
-        # Here, programmers is the group name and we are adding self.channel_name into the group
-        # self.channel_layer.group_add("programmers", self.channel_name)
-        async_to_sync(self.channel_layer.group_add)("programmers", self.channel_name)
+
+        print("Dynamic Group Name...", self.scope['url_route']['kwargs']['group_ka_naam'])
+        self.group_name = self.scope['url_route']['kwargs']['group_ka_naam']
+        print("Group Name...", self.group_name)
+        async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
 
         self.send({"type": "websocket.accept"})
 
@@ -25,7 +24,7 @@ class MySyncConsumer(SyncConsumer):
         print("Message Received from Client...", event["text"])
         print("Type of Message Received from Client...", type(event["text"]))
         async_to_sync(self.channel_layer.group_send)(
-            "programmers", {"type": "chat.message", "message": event["text"]}
+            self.group_name, {"type": "chat.message", "message": event["text"]}
         )
 
     #! FLOW => The message sent by the client will be received by the websocket_receive() function, which will then be sent to the chat_message() function using the programmers group. Then the chat_message() function will do some processing and then send the response back to the client using the websocket.send consumer event.
@@ -52,7 +51,7 @@ class MySyncConsumer(SyncConsumer):
         )  # get default channel layer from a project
         print("Channel Name...", self.channel_name)  # get channel Name
         async_to_sync(self.channel_layer.group_discard)(
-            "programmers", self.channel_name
+            self.group_name, self.channel_name
         )
         raise StopConsumer()
 
@@ -62,9 +61,13 @@ class MyAsyncConsumer(AsyncConsumer):
     print('Websocket Connected...', event)
     print("Channel Layer...", self.channel_layer)   # get default channel layer from a project
     print("Channel Name...", self.channel_name)   # get channel Name
+    
+    print("Dynamic Group Name...", self.scope['url_route']['kwargs']['group_ka_naam'])
+    self.group_name = self.scope['url_route']['kwargs']['group_ka_naam']
+    print("Group Name...", self.group_name)
     #  add a channel to a new or existing group
     await self.channel_layer.group_add(
-      'programmers',      # group name
+      self.group_name,      # group name
       self.channel_name
       )
     await self.send({
@@ -75,7 +78,7 @@ class MyAsyncConsumer(AsyncConsumer):
     print('Message Received from Client...', event['text'])
     print('Type of Message Received from Client...', type(event['text']))
     await self.channel_layer.group_send(
-      'programmers', 
+      self.group_name, 
       {
         'type': 'chat.message',
         'message':event['text']
@@ -97,7 +100,7 @@ class MyAsyncConsumer(AsyncConsumer):
     print("Channel Layer...", self.channel_layer)   # get default channel layer from a project
     print("Channel Name...", self.channel_name)   # get channel Name
     await self.channel_layer.group_discard(
-      'programmers', 
+      self.group_name, 
       self.channel_name
       )
     raise StopConsumer()
