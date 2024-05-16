@@ -243,3 +243,17 @@ ws.onmessage = function (event) {
 45. Keep the consumers code same with just async function and use await just before sending data.
 46. Create a routing url for the consumer.
 47. Now use the async url in your template.
+
+
+#! Dynamic Group Name - IMPORTANT
+48. In consumers.py, scope is same as request in the views.py
+49. A new dynamic group name is passed in the urls.py "path('<str:group_name>/', views.index)," which will act as a dynamic group name in the consumers.py
+50. Now pass this dynamic group name in the url in the views.py and from context pass it to the django template.
+51. Prepare a dynamic url and connect it to the consumer.
+52. Add that dynamic group name in this 
+"
+print("Dynamic Group Name...", self.scope['url_route']['kwargs']['group_ka_naam'])
+self.group_name = self.scope['url_route']['kwargs']['group_ka_naam']
+print("Group Name...", self.group_name)
+async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
+"
