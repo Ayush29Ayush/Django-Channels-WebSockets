@@ -21,6 +21,12 @@
     };
     ws.onmessage = function (event) {
       console.log('Message Received from Server...', event.data)
+      console.log('Type of Message Received from Server...', typeof (event.data))
+      const data = JSON.parse(event.data)   // String to Object
+      console.log('Parsed Data...', data)
+      console.log('Type of Parsed Data...', typeof (data))
+      console.log('Actual Message...', data.msg)
+      document.querySelector('#chat-log').value += (data.msg + '\n') // append the data.msg to its value
     };
     ws.onclose = function (event) {
       console.error('Websocket Connection closed unexpectedly...');

@@ -34,16 +34,16 @@ class MySyncConsumer(SyncConsumer):
         print("Actual Data...", event["message"])
         print("Type of Actual Data...", type(event["message"]))
         # Parse the JSON string to a dictionary
-        message_data = json.loads(event["message"])
-        print("Type of message_data...", type(message_data))
+        # message_data = json.loads(event["message"])
+        # print("Type of message_data...", type(message_data))
         # Extract the value of the "msg" key
-        msg_value = message_data["msg"]
+        # msg_value = message_data["msg"]
         # Concatenate "output_message" with the extracted value
-        ayush_output_message = "output_message" + msg_value
-        print("ayush_output_message =>", ayush_output_message)
-        # self.send({"type": "websocket.send", "text": event["message"]})
+        # ayush_output_message = "output_message" + msg_value
+        # print("ayush_output_message =>", ayush_output_message)
+        self.send({"type": "websocket.send", "text": event["message"]})
         #! This will send the message to the client and will be received by ws.onmessage
-        self.send({"type": "websocket.send", "text": ayush_output_message})
+        # self.send({"type": "websocket.send", "text": ayush_output_message})
 
     def websocket_disconnect(self, event):
         print("Websocket Disconnected...", event)
