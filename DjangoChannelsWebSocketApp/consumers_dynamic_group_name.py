@@ -1,4 +1,4 @@
-# Topic - Chat App with Static Group Name
+# Topic - Chat App with Dynamic Group Name
 import asyncio
 import json
 from channels.consumer import SyncConsumer, AsyncConsumer
