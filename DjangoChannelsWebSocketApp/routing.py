@@ -1,13 +1,19 @@
 from django.urls import path
 # from . import consumers_static_group_name
 # from . import consumers_dynamic_group_name
-from . import consumers_database
+# from . import consumers_database
+from . import consumers_authentication
 
 
 websocket_urlpatterns = [
-    path("ws/sc/<str:group_ka_naam>/", consumers_database.MySyncConsumer.as_asgi()),
-    path('ws/ac/<str:group_ka_naam>/', consumers_database.MyAsyncConsumer.as_asgi()),
+    path("ws/sc/<str:group_ka_naam>/", consumers_authentication.MySyncConsumer.as_asgi()),
+    path('ws/ac/<str:group_ka_naam>/', consumers_authentication.MyAsyncConsumer.as_asgi()),
 ]
+
+# websocket_urlpatterns = [
+#     path("ws/sc/<str:group_ka_naam>/", consumers_database.MySyncConsumer.as_asgi()),
+#     path('ws/ac/<str:group_ka_naam>/', consumers_database.MyAsyncConsumer.as_asgi()),
+# ]
 
 # websocket_urlpatterns = [
 #     path("ws/sc/<str:group_ka_naam>/", consumers_dynamic_group_name.MySyncConsumer.as_asgi()),

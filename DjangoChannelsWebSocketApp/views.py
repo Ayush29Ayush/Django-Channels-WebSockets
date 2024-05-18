@@ -14,4 +14,5 @@ def index(request, group_name):
     # return render(request, "DjangoChannelsWebSocketApp/index.html")
     # return render(request, "DjangoChannelsWebSocketApp/django_channel_layers.html")
     # return render(request, "DjangoChannelsWebSocketApp/django_channel_layers_dynamic_group_name.html", {"groupname": group_name})
-    return render(request, "DjangoChannelsWebSocketApp/django_channel_database.html", {"groupname": group_name, 'chats':chats})
+    # return render(request, "DjangoChannelsWebSocketApp/django_channel_database.html", {"groupname": group_name, 'chats':chats})
+    return render(request, "DjangoChannelsWebSocketApp/django_channel_authentication.html", {"groupname": group_name, 'chats':chats})
