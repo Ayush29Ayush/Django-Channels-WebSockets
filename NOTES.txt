@@ -257,3 +257,119 @@ self.group_name = self.scope['url_route']['kwargs']['group_ka_naam']
 print("Group Name...", self.group_name)
 async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
 "
+
+
+#! Django Channel Database
+53. Create Group and Chat model in models.py
+54. Makemigrations and Migrate
+55. Register them in admin.py
+56. In view, since the group name is accessible through the url, create a new instance of the group and save it in the database. Write logic to prevent adding duplicate groups names.
+57. If the group already exists then just get the chats for it and send it to the template using context.
+58. This is how you will get the group name from the database and store its corresponding chats in the database => 
+"
+def websocket_receive(self, event):
+        print("Message Received from Client...", event["text"])
+        print("Type of Message Received from Client...", type(event["text"]))
+        data = json.loads(event["text"])
+        print("Data...", data)
+        print("Type of Data...", type(data))
+        print("Chat Message", data["msg"])
+        # Find Group Object
+        group = Group.objects.get(name=self.group_name)
+        # Create New Chat Object
+        chat = Chat(content=data["msg"], group=group)
+        chat.save()
+        async_to_sync(self.channel_layer.group_send)(self.group_name, {"type": "chat.message", "message": event["text"]})
+"
+59. For AsyncConsumer, use database_sync_to_async
+"
+async def websocket_receive(self, event):
+    print('Message Received from Client...', event['text'])
+    print('Type of Message Received from Client...', type(event['text']))
+    data = json.loads(event['text'])
+    print("Data...", data)
+    print("Type of Data...", type(data))
+    print("Chat Message", data['msg'])
+    # Find Group Object
+    group = await database_sync_to_async(Group.objects.get)(name = self.group_name)
+    # Create New Chat Object
+    chat = Chat(content = data['msg'],group = group)
+    await database_sync_to_async(chat.save)()
+    await self.channel_layer.group_send(
+      self.group_name, 
+      {
+        'type': 'chat.message',
+        'message':event['text']
+      }
+    )
+"
+
+
+#! Django Channels Authentication
+60. Add "from channels.auth import AuthMiddlewareStack" in asgi.py and wrap the websocket urls in the AuthMiddlewareStack
+61. Write if else condition for checking if the user is authenticated or not
+"
+def websocket_receive(self, event):
+        print("Message Received from Client...", event["text"])
+        print("Type of Message Received from Client...", type(event["text"]))
+        data = json.loads(event["text"])
+        print("Data...", data)
+        print("Type of Data...", type(data))
+        print("Chat Message", data["msg"])
+
+        print("User => ", self.scope["user"])
+
+        # Find Group Object
+        group = Group.objects.get(name = self.group_name)
+        if self.scope['user'].is_authenticated:
+            # Create New Chat Object
+            chat = Chat(
+                content = data['msg'],
+                group = group
+            )
+            chat.save()
+            async_to_sync(self.channel_layer.group_send)(
+                self.group_name, 
+                {
+                'type': 'chat.message',
+                'message':event['text']
+                }
+            )
+        else:
+            self.send({
+                'type':'websocket.send',
+                'text': json.dumps({"msg":"Login Required"})
+            })
+
+  async def websocket_receive(self, event):
+    print('Message Received from Client...', event['text'])
+    print('Type of Message Received from Client...', type(event['text']))
+    data = json.loads(event['text'])
+    print("Data...", data)
+    print("Type of Data...", type(data))
+    print("Chat Message", data['msg'])
+    # Find Group Object
+    group = await database_sync_to_async(Group.objects.get)(name = self.group_name)
+    if self.scope['user'].is_authenticated:
+      # Create New Chat Object
+      chat = Chat(
+        content = data['msg'],
+        group = group
+      )
+      await database_sync_to_async(chat.save)()
+      data['user'] = self.scope['user'].username
+      print("Complete Data...", data)
+      print("Type of Complete Data...", type(data))
+      await self.channel_layer.group_send(
+        self.group_name, 
+        {
+          'type': 'chat.message',
+          'message':json.dumps(data)
+        }
+      )
+    else:
+      await self.send({
+        'type':'websocket.send',
+        'text': json.dumps({"msg":"Login Required", "user":"guest"})
+      })
+"
