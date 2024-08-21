@@ -237,7 +237,7 @@ ws.onmessage = function (event) {
 };
 "
 
-#! IMP -> CODE REVISION -> 01:16:00 - 01:30:00
+#! IMP -> CODE REVISION -> 01:16:00 - 01:30:00 (https://www.youtube.com/watch?v=wr-83X_zPyc&list=PLbGui_ZYuhij6LpUbWgKUxggL_AuoHHVw&index=13)
 
 #! AsyncConsumer 
 45. Keep the consumers code same with just async function and use await just before sending data.
