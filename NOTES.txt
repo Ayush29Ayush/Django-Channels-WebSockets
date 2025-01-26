@@ -1,5 +1,7 @@
 Refer this playlist => https://www.youtube.com/playlist?list=PLbGui_ZYuhij6LpUbWgKUxggL_AuoHHVw
 
+For All Codes and PPT, Refer => https://drive.google.com/drive/folders/1OgV6d2cx1RsjGFpcXrY6Kasjcoki0fKF?usp=drive_link
+
 #! INSTALLATION OF DJANGO CHANNELS
 1. Install channels using `pip install channels`
 2. Now add `channels` in INSTALLED_APPS
